@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+  <rect width="800" height="600" fill="#e5f3ff"/>
+  <rect x="60" y="60" width="680" height="480" rx="24" fill="#f8fbff" stroke="#94a3b8" stroke-width="3"/>
+  <rect x="140" y="180" width="520" height="180" rx="16" fill="#0f172a"/>
+  <circle cx="220" cy="270" r="34" fill="#38bdf8"/>
+  <rect x="270" y="230" width="150" height="22" rx="8" fill="#e2e8f0"/>
+  <rect x="270" y="268" width="230" height="18" rx="8" fill="#cbd5e1"/>
+  <rect x="270" y="300" width="200" height="18" rx="8" fill="#cbd5e1"/>
+  <text x="400" y="130" text-anchor="middle" font-family="Arial, sans-serif" font-size="36" font-weight="700" fill="#0f172a">Router Mikrotik</text>
+  <text x="400" y="500" text-anchor="middle" font-family="Arial, sans-serif" font-size="30" font-weight="600" fill="#475569">RB941-2nD</text>
+</svg>
