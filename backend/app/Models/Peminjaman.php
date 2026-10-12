@@ -41,6 +41,11 @@ class Peminjaman extends Model
         return $this->hasOne(Pengembalian::class, 'peminjaman_id');
     }
 
+    public function pengajuanPengembalian(): HasOne
+    {
+        return $this->hasOne(PengajuanPengembalian::class, 'peminjaman_id');
+    }
+
     public function detailPinjam()
     {
         return $this->hasMany(DetailPinjam::class, 'peminjaman_id');

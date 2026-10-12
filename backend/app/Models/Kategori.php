@@ -12,6 +12,6 @@ class Kategori extends Model
 
     public function alat(): HasMany
     {
-        return $this->hasMany(alat::class);
+        return $this->hasMany(Alat::class);
     }
 }

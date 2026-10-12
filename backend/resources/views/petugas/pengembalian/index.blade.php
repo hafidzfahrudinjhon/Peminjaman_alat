@@ -72,6 +72,15 @@
                                 <form action="{{ route('petugas.pengembalian.proses', $item->id) }}" method="POST"
                                     class="inline-block bg-gray-50 p-3 rounded border border-gray-200 text-left space-y-2">
                                     @csrf
+                                    @if($item->pengajuanPengembalian)
+                                        <p class="text-xs text-amber-800 bg-amber-50 p-2 rounded">
+                                            @if($item->pengajuanPengembalian->kondisi_kembali === 'Belum diperiksa oleh petugas')
+                                                Menunggu pemeriksaan kondisi oleh petugas.
+                                            @else
+                                                Kondisi yang dilaporkan peminjam: {{ $item->pengajuanPengembalian->kondisi_kembali }}
+                                            @endif
+                                        </p>
+                                    @endif
                                     <div>
                                         <label class="block text-xs font-semibold text-gray-600 mb-1">Kondisi Kembali:</label>
                                         <select name="kondisi_kembali" required

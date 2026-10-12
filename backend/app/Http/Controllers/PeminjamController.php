@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Alat;
 use App\Models\DetailPinjam;
 use App\Models\Peminjaman;
-use App\Models\Pengembalian;
+use App\Models\PengajuanPengembalian;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -65,7 +65,7 @@ class PeminjamController extends Controller
 
     public function riwayatPeminjaman()
     {
-        $peminjamans = Peminjaman::with('detailPinjams.alat')
+        $peminjamans = Peminjaman::with(['detailPinjams.alat', 'pengembalian', 'pengajuanPengembalian'])
             ->where('user_id', auth()->id())
             ->latest()
             ->get();
@@ -75,58 +75,43 @@ class PeminjamController extends Controller
 
     public function daftarBarangDipinjam()
     {
-        $peminjamans = Peminjaman::with(['detailPinjams.alat', 'pengembalian'])
-            ->where('user_id', auth()->id())
-            ->where('status', 'dipinjam')
-            ->latest()
-            ->get();
-
-        return view('peminjam.kembali', compact('peminjamans'));
+        return redirect()->route('peminjam.riwayat');
     }
 
     public function kembalikanBarang(Request $request, $id)
     {
-        $request->validate([
-            'kondisi_kembali' => 'required|string|min:3',
-            'denda' => 'nullable|integer|min:0',
+        $data = $request->validate([
+            'kondisi_kembali' => 'required|string|min:3|max:255',
         ]);
 
         DB::beginTransaction();
 
         try {
-            $peminjaman = Peminjaman::with('detailPinjams.alat')
-                ->where('user_id', auth()->id())
+            $peminjaman = Peminjaman::where('user_id', auth()->id())
+                ->lockForUpdate()
                 ->findOrFail($id);
 
             if ($peminjaman->status !== 'dipinjam') {
                 throw new \Exception('Barang ini tidak dapat dikembalikan karena statusnya bukan sedang dipinjam.');
             }
 
-            if ($peminjaman->pengembalian()->exists()) {
-                throw new \Exception('Barang ini sudah pernah dikembalikan.');
+            if ($peminjaman->pengembalian()->exists() || $peminjaman->pengajuanPengembalian()->exists()) {
+                throw new \Exception('Pengajuan pengembalian untuk barang ini sudah dikirim.');
             }
 
-            Pengembalian::create([
+            PengajuanPengembalian::create([
                 'peminjaman_id' => $peminjaman->id,
-                'tgl_kembali' => now(),
-                'kondisi_kembali' => $request->kondisi_kembali,
-                'denda' => $request->denda ?? 0,
-                'petugas_id' => auth()->id(),
+                'user_id' => auth()->id(),
+                'kondisi_kembali' => $data['kondisi_kembali'],
             ]);
-
-            $peminjaman->update(['status' => 'selesai']);
-
-            foreach ($peminjaman->detailPinjams as $detail) {
-                $detail->alat->increment('stok', $detail->jumlah);
-            }
 
             DB::commit();
 
-            return redirect()->route('peminjam.riwayat')->with('success', 'Barang berhasil dikembalikan.');
+            return redirect()->route('peminjam.riwayat')->with('success', 'Pengajuan pengembalian berhasil dikirim dan menunggu verifikasi petugas.');
         } catch (\Exception $e) {
             DB::rollBack();
 
-            return redirect()->back()->with('error', 'Gagal mengembalikan barang: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Gagal mengajukan pengembalian: ' . $e->getMessage());
         }
     }
 }
