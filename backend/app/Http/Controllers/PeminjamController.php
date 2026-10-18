@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Alat;
 use App\Models\DetailPinjam;
+use App\Models\LogAktivitas;
 use App\Models\Peminjaman;
 use App\Models\PengajuanPengembalian;
 use Illuminate\Http\Request;
@@ -70,7 +71,12 @@ class PeminjamController extends Controller
             ->latest()
             ->get();
 
-        return view('peminjam.riwayat', compact('peminjamans'));
+        $logs = LogAktivitas::with('user')
+            ->where('user_id', auth()->id())
+            ->latest()
+            ->get();
+
+        return view('peminjam.riwayat', compact('peminjamans', 'logs'));
     }
 
     public function daftarBarangDipinjam()
