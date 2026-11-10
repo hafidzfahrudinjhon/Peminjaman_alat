@@ -1,7 +1,6 @@
 services:
-  MySQL-API:
+  mysql-server:
     image: mysql:8.0
-    container_name: MySQL-API
     environment:
       MYSQL_DATABASE: api_ujikom
       MYSQL_USER: api_ujikom
@@ -26,7 +25,7 @@ services:
       - ./backend:/var/www
     command: php -S 0.0.0.0:8000 -t public
     depends_on:
-      - MySQL-API
+      - mysql-server
     networks:
       - API-UJIKOM
 
@@ -34,11 +33,11 @@ services:
     image: phpmyadmin
     container_name: PhpMyadmin-API
     environment:
-      PMA_HOST: MySQL-API
+      PMA_HOST: mysql-server
     ports:
       - "8081:80"
     depends_on:
-      - MySQL-API
+      - mysql-server
     networks:
       - API-UJIKOM
 

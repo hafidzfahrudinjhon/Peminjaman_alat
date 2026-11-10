@@ -16,31 +16,21 @@ class AuthController extends Controller
 {
     public function register(RegisterRequest $request): JsonResponse
     {
-        try {
-            $user = DB::transaction(function () use ($request) {
-                return User::create([
-                    'name' => $request->name,
-                    'email' => $request->email,
-                    'password' => Hash::make($request->password),
-                    'role' => 'admin',
-                    'no_hp' => $request->no_hp,
-                    'alamat' => $request->alamat,
-                ]);
-            });
+        $data = $request->validated();
+        $user = DB::transaction(function () use ($data) {
+            return User::create([
+                ...$data,
+                'role' => 'peminjam',
+            ]);
+        });
 
-            $token = $user->createToken('auth_token')->plainTextToken;
-            return response()->json([
-                'message' => 'Registrasi berhasil',
-                'data' => new UserResource($user),
-                'access_token' => $token,
-                'token_type' => 'Bearer',
-            ], 201);
-    } catch (\Exception $e) {
+        $token = $user->createToken('auth_token')->plainTextToken;
         return response()->json([
-            'message' => 'Terjadi kesalahan saat registrasi.', 
-            'error' => $e->getMessage(),
-        ], 500);
-       }
+            'message' => 'Registrasi berhasil',
+            'data' => new UserResource($user),
+            'access_token' => $token,
+            'token_type' => 'Bearer',
+        ], 201);
     }
 
     public function login(LoginRequest $request): JsonResponse
@@ -77,4 +67,3 @@ class AuthController extends Controller
         ]);
     }
 }
-

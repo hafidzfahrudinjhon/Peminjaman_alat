@@ -5,6 +5,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\PetugasController;
 use App\Http\Controllers\PeminjamController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ProfileController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -229,6 +230,14 @@ Route::middleware(['auth', 'role:peminjam'])
             ->name('riwayat');
     });
 
+Route::middleware('auth')->group(function () {
+    Route::get('/profil', [ProfileController::class, 'edit'])
+        ->name('profile.edit');
+
+    Route::put('/profil', [ProfileController::class, 'update'])
+        ->name('profile.update');
+});
+
 
 // =====================================================
 // TAMU
@@ -240,6 +249,11 @@ Route::middleware(['guest'])->group(function () {
         ->name('login');
 
     Route::post('/login', [AuthController::class, 'login']);
+
+    Route::get('/register', [AuthController::class, 'showRegisterForm'])
+        ->name('register');
+
+    Route::post('/register', [AuthController::class, 'register']);
 });
 
 

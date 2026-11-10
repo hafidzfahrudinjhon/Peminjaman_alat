@@ -23,6 +23,7 @@
                 <a href="{{ route('admin.kategori.index') }}" class="block px-4 py-2 rounded-lg {{ request()->routeIs('admin.kategori*') ? 'bg-gray-800 text-white font-medium shadow' : 'text-gray-400 hover:bg-gray-800 hover:text-white' }} transition">Kelola Kategori</a>
                 <a href="{{ route('admin.peminjaman.index') }}" class="block px-4 py-2 rounded-lg {{ request()->routeIs('admin.peminjaman*') ? 'bg-gray-800 text-white font-medium shadow' : 'text-gray-400 hover:bg-gray-800 hover:text-white' }} transition">Kelola Peminjaman</a>
                 <a href="{{ route('admin.pengembalian.index') }}" class="block px-4 py-2 rounded-lg {{ request()->routeIs('admin.pengembalian*') ? 'bg-gray-800 text-white font-medium shadow' : 'text-gray-400 hover:bg-gray-800 hover:text-white' }} transition">Kelola Pengembalian</a>
+                <a href="{{ route('profile.edit') }}" class="block px-4 py-2 rounded-lg {{ request()->routeIs('profile.*') ? 'bg-gray-800 text-white font-medium shadow' : 'text-gray-400 hover:bg-gray-800 hover:text-white' }} transition">Profil</a>
             </div>
             <div class="p-4 border-t border-gray-800 text-sm text-gray-400">
                 Logged in as: <span class="text-white font-semibold">{{ auth()->user()->name }}</span>
@@ -45,6 +46,7 @@
                 <a href="{{ route('petugas.laporan.index') }}"
                 class="block px-4 py-2 rounded-lg transition {{ request()->routeIs('petugas.laporan*') ? 'bg-gray-800 text-white font-medium shadow' : 'text-gray-400 hover:bg-gray-800 hover:text-white' }}">
                 Cetak Laporan</a>
+                <a href="{{ route('profile.edit') }}" class="block px-4 py-2 rounded-lg transition {{ request()->routeIs('profile.*') ? 'bg-gray-800 text-white font-medium shadow' : 'text-gray-400 hover:bg-gray-800 hover:text-white' }}">Profil</a>
             </div>
             @endif
 
@@ -61,8 +63,8 @@
                 class="block px-4 py-2 rounded-lg transition {{ request()->routeIs('peminjam.riwayat') ? 'bg-gray-800 text-white font-medium shadow' : 'text-gray-400 hover:bg-gray-800 hover:text-white' }}">
                 Riwayat Peminjaman</a>
 
-                <a href="#"
-                class="block px-4 py-2 rounded-lg transition text-gray-400 hover:bg-gray-800 hover:text-white">
+                <a href="{{ route('profile.edit') }}"
+                class="block px-4 py-2 rounded-lg transition {{ request()->routeIs('profile.*') ? 'bg-gray-800 text-white font-medium shadow' : 'text-gray-400 hover:bg-gray-800 hover:text-white' }}">
                 Profil</a>
             </div>
             <div class="p-4 border-t border-gray-800 text-sm text-gray-400">
